@@ -5,6 +5,7 @@ import torch.nn as nn
 import torch.nn.functional as func
 import numpy as np
 import Data.Spotify.GetSpotifyData as GetSpotifyData
+import matplotlib.pyplot as plt
 
 
 def lat_space(batch_size, dev="cpu"):
@@ -111,6 +112,12 @@ device = input("Would you like to run this test on cpu or cuda? Type the one you
 
 gan = ConditionalGANTrainer(gen, dis, lat_space, batch_from_data, gen_loss, dis_loss, gen_opt, dis_opt,
                             device, sw, num_input_variables=num_inputs, classes=num_classes, do_wass_viz=True)
+
+is_wass_GAN = input("Would you like to run this as a Wasserstein GAN? Type y or n: ")
+
+if is_wass_GAN == 'y':
+    gan.to_wass(0.0001, 0.0002)
+
 epochs = 7
 gan.train(epochs, 16)
 output = gan.eval_generator(lat_space(16, device))
@@ -119,6 +126,13 @@ print_output(output.to("cpu"))
 gan.divergence_by_epoch()
 
 gan.loss_by_epoch_d()
+
+if is_wass_GAN == 'y':
+    plt.title('Wasserstein GAN Training Over Time')
+    plt.xlabel('Batches')
+    plt.ylabel('Wasserstein Distance Mean')
+    plt.plot(gan.stats["wass_dists"])
+    plt.show()
 
 # Split data into training and testing
 # Do a scipy linear or logistic regression

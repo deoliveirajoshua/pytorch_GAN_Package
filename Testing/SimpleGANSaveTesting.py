@@ -73,8 +73,8 @@ gan.train(700, 16)
 
 gan.soft_save(os.getcwd() + "/SAVETEST")
 
-gan2 = SimpleGANTrainer(Generator(), Discriminator(), lat_space, batch_from_data, None, None, torch.optim.Adam(gen.parameters(),
-                                                                                               lr=0.001),
+gan2 = SimpleGANTrainer(Generator(), Discriminator(), lat_space, batch_from_data, None, None,
+                        torch.optim.Adam(gen.parameters(), lr=0.001),
                         torch.optim.Adam(dis.parameters(), lr=0.001), device, None)
 gan2.soft_load(os.getcwd() + "/SAVETEST")
 
@@ -83,8 +83,8 @@ print(gan2.eval_generator(lat_space(16, device)))
 gan2.train(700, 16)
 print(gan2.stats["epochs_trained"])
 
-gan3 = SimpleGANTrainer(Generator(), Discriminator(), lat_space, batch_from_data, None, None, torch.optim.Adam(gen.parameters(),
-                                                                                                               lr=0.001),
+gan3 = SimpleGANTrainer(Generator(), Discriminator(), lat_space, batch_from_data, None, None,
+                        torch.optim.Adam(gen.parameters(), lr=0.001),
                         torch.optim.Adam(dis.parameters(), lr=0.001), device, None)
 gan3.to_wass(0.001, 0.002)
 try:
