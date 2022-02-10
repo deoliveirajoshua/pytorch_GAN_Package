@@ -1,4 +1,4 @@
-from src.GANTrainer import ToTrain
+from GANTrainer import ToTrain
 import torch
 import math, os, pickle
 import matplotlib.pyplot as plt
