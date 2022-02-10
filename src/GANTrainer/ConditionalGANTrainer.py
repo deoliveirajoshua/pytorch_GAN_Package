@@ -1,8 +1,6 @@
-import SimpleGANTrainer
-import ToTrain
+from src.GANTrainer import SimpleGANTrainer
 import torch
 import torch.nn.functional as func
-import math
 import numpy as np
 import matplotlib.pyplot as plt
 

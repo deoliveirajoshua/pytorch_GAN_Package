@@ -1,7 +1,7 @@
 import os
 
-from SimpleGANTrainer import SimpleGANTrainer
-from ToTrain import TwoFiveRule
+from src.GANTrainer.SimpleGANTrainer import SimpleGANTrainer
+from src.GANTrainer.ToTrain import TwoFiveRule
 import torch
 import torch.nn as nn
 import math

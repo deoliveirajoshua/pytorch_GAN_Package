@@ -1,8 +1,6 @@
-import ToTrain
+from src.GANTrainer import ToTrain
 import torch
-import torch.nn.functional as func
 import math, os, pickle
-import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import wasserstein_distance
 import torch.optim as optim

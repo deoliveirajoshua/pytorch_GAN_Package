@@ -1,5 +1,5 @@
-from ConditionalGANTrainer import ConditionalGANTrainer
-from ToTrain import TwoFiveRule
+from src.GANTrainer.ConditionalGANTrainer import ConditionalGANTrainer
+from src.GANTrainer.ToTrain import TwoFiveRule
 import torch
 import torch.nn as nn
 import torch.nn.functional as func
