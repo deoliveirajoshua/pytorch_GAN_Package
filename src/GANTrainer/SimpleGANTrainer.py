@@ -212,7 +212,7 @@ class SimpleGANTrainer:
         if not os.path.isdir(path):
             os.mkdir(path)
 
-        f = open(path + "\\trainer_flags.ts", "wb")
+        f = open(path + "/trainer_flags.ts", "wb")
         pickle.dump(self.flags, f)
         f.close()
 
@@ -228,11 +228,11 @@ class SimpleGANTrainer:
             raise ValueError("No folder at " + path)
 
         try:
-            assert os.path.isfile(path + "\\trainer_flags.ts")
+            assert os.path.isfile(path + "/trainer_flags.ts")
         except AssertionError:
             raise ValueError("Cannot detect trainer flags dict at " + path)
 
-        f = open(path + "\\trainer_flags.ts", "rb")
+        f = open(path + "/trainer_flags.ts", "rb")
         newflags = pickle.load(f)
         # Check for compat
         if self.flags["is_wass"] != newflags["is_wass"]:
@@ -251,7 +251,7 @@ class SimpleGANTrainer:
             os.mkdir(path)
 
         for model_name in self.list_models():
-            torch.save(self.models[model_name].state_dict(), path + "\\" + model_name + ".pt")
+            torch.save(self.models[model_name].state_dict(), path + "/" + model_name + ".pt")
 
     def save_opt_state_dicts(self, path):
         """Saves the optimizer state dicts to folder at specified location. Creates folder if it does not exist.
@@ -261,7 +261,7 @@ class SimpleGANTrainer:
             os.mkdir(path)
 
         for opt_name in self.list_opts():
-            torch.save(self.optimizers[opt_name].state_dict(), path + "\\" + opt_name + ".pto")
+            torch.save(self.optimizers[opt_name].state_dict(), path + "/" + opt_name + ".pto")
 
     def load_model_state_dicts(self, path):
         """Loads model state dicts from specified folder. Throws ValueError if path does not exist,
@@ -275,12 +275,12 @@ class SimpleGANTrainer:
 
         try:
             for model_name in self.list_models():
-                assert os.path.isfile(path + "\\" + model_name + ".pt")
+                assert os.path.isfile(path + "/" + model_name + ".pt")
         except AssertionError:
             raise ValueError("Not all models have an associated state_dict at " + path)
 
         for model_name in self.list_models():
-            self.models[model_name].load_state_dict(torch.load(path + "\\" + model_name + ".pt"))
+            self.models[model_name].load_state_dict(torch.load(path + "/" + model_name + ".pt"))
 
     def load_opt_state_dicts(self, path):
         """Loads optimizer state dicts from specified folder. Throws ValueError if path does not exist,
@@ -294,12 +294,12 @@ class SimpleGANTrainer:
 
         try:
             for opt_name in self.list_opts():
-                assert os.path.isfile(path + "\\" + opt_name + ".pto")
+                assert os.path.isfile(path + "/" + opt_name + ".pto")
         except AssertionError:
             raise ValueError("Not all optimizers have an associated state_dict at " + path)
 
         for opt_name in self.list_opts():
-            self.optimizers[opt_name].load_state_dict(torch.load(path + "\\" + opt_name + ".pto"))
+            self.optimizers[opt_name].load_state_dict(torch.load(path + "/" + opt_name + ".pto"))
 
     def save_trainer_stats_dict(self, path):
         """Saves trainer stats dict into specified folder. Creates folder if it does not exist.
@@ -309,7 +309,7 @@ class SimpleGANTrainer:
         if not os.path.isdir(path):
             os.mkdir(path)
 
-        f = open(path + "\\trainer_stats.ts", "wb")
+        f = open(path + "/trainer_stats.ts", "wb")
         pickle.dump(self.stats, f)
         f.close()
 
@@ -320,7 +320,7 @@ class SimpleGANTrainer:
         if not os.path.isdir(path):
             os.mkdir(path)
 
-        f = open(path + "\\loss_functions.ts", "wb")
+        f = open(path + "/loss_functions.ts", "wb")
         pickle.dump(self.loss_functions, f)
         f.close()
 
@@ -331,7 +331,7 @@ class SimpleGANTrainer:
         if not os.path.isdir(path):
             os.mkdir(path)
 
-        f = open(path + "\\in_functions.ts", "wb")
+        f = open(path + "/in_functions.ts", "wb")
         pickle.dump(self.in_functions, f)
         f.close()
 
@@ -342,7 +342,7 @@ class SimpleGANTrainer:
         if not os.path.isdir(path):
             os.mkdir(path)
 
-        f = open(path + "\\to_train.ts", "wb")
+        f = open(path + "/to_train.ts", "wb")
         pickle.dump(self.totrain, f)
         f.close()
 
@@ -357,11 +357,11 @@ class SimpleGANTrainer:
             raise ValueError("No folder at " + path)
 
         try:
-            assert os.path.isfile(path + "\\trainer_stats.ts")
+            assert os.path.isfile(path + "/trainer_stats.ts")
         except AssertionError:
             raise ValueError("Cannot detect trainer stats dict at " + path)
 
-        f = open(path + "\\trainer_stats.ts", "rb")
+        f = open(path + "/trainer_stats.ts", "rb")
         self.stats = pickle.load(f)
         f.close()
 
@@ -379,11 +379,11 @@ class SimpleGANTrainer:
             raise ValueError("No folder at " + path)
 
         try:
-            assert os.path.isfile(path + "\\loss_functions.ts")
+            assert os.path.isfile(path + "/loss_functions.ts")
         except AssertionError:
             raise ValueError("Cannot detect loss_functions dict at " + path)
 
-        f = open(path + "\\loss_functions.ts", "rb")
+        f = open(path + "/loss_functions.ts", "rb")
         self.loss_functions = pickle.load(f)
         f.close()
 
@@ -400,11 +400,11 @@ class SimpleGANTrainer:
             raise ValueError("No folder at " + path)
 
         try:
-            assert os.path.isfile(path + "\\in_functions.ts")
+            assert os.path.isfile(path + "/in_functions.ts")
         except AssertionError:
             raise ValueError("Cannot detect in_functions dict at " + path)
 
-        f = open(path + "\\in_functions.ts", "rb")
+        f = open(path + "/in_functions.ts", "rb")
         self.in_functions = pickle.load(f)
         f.close()
 
@@ -421,11 +421,11 @@ class SimpleGANTrainer:
             raise ValueError("No folder at " + path)
 
         try:
-            assert os.path.isfile(path + "\\to_train.ts")
+            assert os.path.isfile(path + "/to_train.ts")
         except AssertionError:
             raise ValueError("Cannot detect in_functions dict at " + path)
 
-        f = open(path + "\\to_train.ts", "rb")
+        f = open(path + "/to_train.ts", "rb")
         self.totrain = pickle.load(f)
         f.close()
 
