@@ -28,6 +28,7 @@ from GANTrainer.SimpleGANTrainer import SimpleGANTrainer
 from GANTrainer.ToTrain import TwoFiveRule
 import torch
 import torch.nn as nn
+import math
 import numpy as np
 ```
 
