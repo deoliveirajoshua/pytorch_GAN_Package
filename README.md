@@ -140,7 +140,14 @@ GAN_DEVICE = "cpu"
 ### ToTrain Object
 
 ToTrain objects are objects designed to determine which model to train during the training process. The package comes with a number of built-in ToTrain objects, and they are designed to be as easy as possible to build your own custom ToTrain object.
+
 Our GAN just uses the Two-Five Rule ToTrain object, which trains the generator for two epochs then trains the discriminator for five epochs.
+
+To create the ToTrain object:
+
+```python
+sw = TwoFiveRule()
+```
 
 ### Discriminator Positive Threshold
 
@@ -209,13 +216,32 @@ gan = SimpleGANTrainer(gen, dis, lat_space, batch_from_data, gen_loss, dis_loss,
 gan.train(7000, 16)
 print(gan.eval_generator(lat_space(16, device)))
 gan.loss_by_epoch_d()
+
+device2 = "cpu"
+gan.models_to(device2)
 ```
 
 ## Visualizing Training
 
+The Trainer object keeps track of certain metrics during training. These can be directly visualized via built-in functions, or accessed through the Trainer object's `.stats` dictionary.
+
 ### Loss by Epoch 
 
-Shows a graph of the loss by epoch for the specified model. Called with `.loss_by_epoch(model_name) # “D” or “G”`
+Shows a graph of the loss by epoch for the specified model. Called with:
+
+```python
+gan.loss_by_epoch(model) # "D" or "G"
+
+# Equivalent to:
+gan.loss_by_epoch_g()
+# or
+gan.loss_by_epoch_d()
+
+# Or:
+dat = gan.stats["losses"][model] # "D" or "G"
+plt.plot(dat)
+plt.show()
+```
 
 ### Divergence by Epoch
 
@@ -244,5 +270,14 @@ gen = Generator()
 dis = Discriminator()
 g_opt = torch.optim.Adam(gen.parameters(), lr=0.001)
 d_opt = torch.optim.Adam(dis.parameters(), lr=0.001)
-gan2 = SimpleGANTrainer(gen, dis, lat_space, batch_from_data, None, None, g_opt, d_opt, “cuda”, None)
+device = "cuda"
+gan2 = SimpleGANTrainer(gen, dis, lat_space, batch_from_data, None, None, g_opt, d_opt, device, None)
+
+assert gan1 != gan2
+
+gan2.soft_load(PATH)
+
+assert gan1 == gan2
+
+gan2.train(16, 10)
 ```
