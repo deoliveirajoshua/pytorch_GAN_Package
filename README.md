@@ -14,13 +14,14 @@ The Trainer object requires some setup before it can be created. In particular, 
 * A function to draw from the real data
 * The device on which to train the models
 * Optionally, the Trainer object can also take:
-* A ToTrain object
-* The desired positive result threshold for the discriminator, used for calculating certain metrics
+	* A ToTrain object
+	* The desired positive result threshold for the discriminator, used for calculating certain metrics
 
 ### Environment Setup
 The package requires pandas, numpy, matplotlib, and pytorch. To install pytorch, follow the directions at: https://pytorch.org/get-started/locally/
 
 Numpy, pandas, and matplotlib can be installed via pip, but will also be installed automatically on installing the package. The package can be installed via pip by running the command: `pip install git+https://github.com/deoliveirajoshua/pytorch_GAN_package.git`
+
 ### Imports
 First, we need to import the packages we plan on using.
 ```python
@@ -32,40 +33,39 @@ import math
 import numpy as np
 ```
 
-
 ### Designing the GAN
 
-Before we can train a GAN, we need to know what we want the GAN to do. For this tutorial, we will create an extremely simple GAN - the generator will generate 7-bit even binary numbers, and the discriminator will distinguish between even and odd 7-bit binary numbers.
+Before we can train a GAN, we need to know what we want the GAN to do. For this tutorial, we will create a GAN with minimal code required - the generator will attempt to generate 7-bit even binary numbers, and the discriminator will distinguish between even and odd 7-bit binary numbers.
 
 ### Models
 
-The simplest possible generator which meets our requirements is a single layer consisting of 7 inputs and outputs and with a Sigmoid activation. This model is defined as follows:
+The least complex generator which meets our requirements is a single layer consisting of 7 inputs and outputs and with a Sigmoid activation. This model is defined as follows:
 ```python
 # Generator
 class Generator(nn.Module):
 		
- def __init__(self):
-	 super(Generator, self).__init__()
-	 self.dense_layer = nn.Linear(7, 7)
-	 self.activation = nn.Sigmoid()
+	def __init__(self):
+		super(Generator, self).__init__()
+		self.dense_layer = nn.Linear(7, 7)
+	 	self.activation = nn.Sigmoid()
 		
- def forward(self, x):
- 	return self.activation(self.dense_layer(x))
+ 	def forward(self, x):
+ 		return self.activation(self.dense_layer(x))
 ```
 
-Our discriminator is similarly simple. It consists of a single layer with 7 inputs and 1 output, again with a Sigmoid activation. It is defined as follows:
+Our discriminator is similarly straightforward. It consists of a single layer with 7 inputs and 1 output, again with a Sigmoid activation. It is defined as follows:
 
 ```python
 # Discriminator
 class Discriminator(nn.Module):
     	
- def __init__(self):
-  super(Discriminator, self).__init__()
- 	self.dense = nn.Linear(7, 1)
- 	self.activation = nn.Sigmoid()
+	def __init__(self):
+  		super(Discriminator, self).__init__()
+ 		self.dense = nn.Linear(7, 1)
+ 		self.activation = nn.Sigmoid()
 
- def forward(self, x):
- 	return self.activation(self.dense(x))
+ 	def forward(self, x):
+ 		return self.activation(self.dense(x))
 ```
 
 Finally, we create the model objects:
@@ -80,9 +80,9 @@ The Trainer object stores the models in its models dictionary. Specifically, the
 
 ### Optimizers and Loss Functions
 
-For our GAN we simply use built-in optimizers and loss functions:
+For our GAN we use built-in optimizers and loss functions:
 ```python
-# built-in optimizers and loss functions:
+# Built-in optimizers and loss functions:
 gen_opt = torch.optim.Adam(gen.parameters(), lr=0.001)
 dis_opt = torch.optim.Adam(dis.parameters(), lr=0.001)
 
@@ -93,15 +93,15 @@ However, any optimizers and loss functions which work in a pytorch training loop
 
 ### Latent Space and Dataset Functions
 
-We now need functions to draw from the latent space and dataset. The latent space is the parameter space from which the generator draws. For our GAN, this is just a simple random tensor of size 7:
+We now need functions to draw from the latent space and dataset. The latent space is the parameter space from which the generator draws. For our GAN, this is just a random tensor of size 7:
 ```python
-# random tensor of size 7
+# Random tensor of size 7
 def lat_space(batch_size, dev):
 	return torch.randint(0, 2, size=(batch_size, 7), device=dev).float()
 ```
 The dataset function is a function designed to return a batch of real data. Real data for us is just an even number, so it’s easier to generate data than retrieve it from a database.
 ```python
-# dataset function
+# Dataset function
 def batch_from_data(batch_size, dev):
 	max_int = 128
 	# Get the number of binary places needed to represent the maximum number
@@ -110,7 +110,7 @@ def batch_from_data(batch_size, dev):
 	# Sample batch_size number of integers in range 0-max_int
 	sampled_integers = np.random.randint(0, int(max_int / 2), batch_size)
 
- # create a list of labels - all ones because all numbers are even
+ # Create a list of labels - all ones because all numbers are even
 	labels = [1] * batch_size
 
 	# Generate a list of binary numbers for training.
@@ -119,23 +119,23 @@ def batch_from_data(batch_size, dev):
 
 	return torch.tensor(data, device=dev).float()
  
- def list_from_num(num):
-  return [int(x) for x in list(bin(num))[2:]]
+def list_from_num(num):
+  	return [int(x) for x in list(bin(num))[2:]]
 ```
-Both the latent space and dataset functions take the parameters `(batch_size, device)`. The `batch_size` parameter determines the size of the batch, and the device parameter is the device on which the tensors are created.
+Both the latent space and dataset functions take the parameters `(batch_size, device)`. The `batch_size` parameter determines how much data will be produced at once, and the device parameter is the physical device, usually a CPU or GPU, on which the tensors are created.
 The functions must output a tensor of the shape `(batch_size, input_size)` - the outputs of the latent space and dataset functions are passed directly into the generator and discriminator respectively.
 
 ### Device
 
-The Trainer object supports training on any device visible to PyTorch. We want to train on the GPU, so we use:
+The Trainer object supports training on any device visible to PyTorch. If we want to train on a GPU, we would use:
 ```python
-# train on GPU
-GAN_DEVICE = "cuda"
+# Train on GPU
+device = "cuda"
 ```
-If we do not have a GPU, we would use:
+If we do not have a GPU or want to use one, we would use:
 ```python
-# train without GPU
-GAN_DEVICE = "cpu"
+# Train without GPU
+device = "cpu"
   ```
 ### ToTrain Object
 
@@ -151,14 +151,14 @@ sw = TwoFiveRule()
 
 ### Discriminator Positive Threshold
 
-The Trainer object allows the user to specify the threshold above which output from the discriminator is considered to be positive. This only impacts calculation of certain metrics (precision, recall, and false positive rate specifically), and does not affect training.
+The Trainer object allows the user to specify the threshold above which output from the discriminator is considered to be positive. This only impacts calculation of certain metrics (precision, recall, and false positive rate), and does not affect training.
 By default, this parameter is set to 0.5 if not specified. This is fine for our purposes, and so we do not set this parameter.
 
 ### Creating the Trainer Object
 
-All that is left to do is to create the trainer object. This is done by:
+Now that all of our componets exist, we can create the trainer object. This is done by:
 ```python
-# trainer object creation
+# Trainer object creation
 gan = SimpleGANTrainer(gen, dis, lat_space, batch_from_data, gen_loss, dis_loss, gen_opt, dis_opt, device, sw)
 ```
 ## Training the GAN
@@ -174,7 +174,7 @@ Trainer objects can train for any length of time, across any number of different
 
 ```python
 gan.train(2000, 16)
-gan.loss_by_epoch(“G”)  # Graphs the generator’s loss for the first 2000 epochs
+gan.loss_by_epoch("G")  # Graphs the generator’s loss for the first 2000 epochs
 gan.train(5000, 16)
 ```
 The state of the ToTrain object is preserved across multiple calls to .train(), so 
@@ -210,8 +210,8 @@ gan.models["G"].train()
 The Trainer object supports moving the models to different devices, so it’s possible to use Trainer objects to train and evaluate models on different devices. Use the `.models_to(new_device)` function to send all models to the specified device.
 To train the models on the GPU and evaluate on the CPU, for instance, we would:
 ```python
-# evaluate on different device
-GAN_DEVICE = "cuda"
+# Evaluate on different device
+device = "cuda"
 gan = SimpleGANTrainer(gen, dis, lat_space, batch_from_data, gen_loss, dis_loss, gen_opt, dis_opt, device, sw)
 gan.train(7000, 16)
 print(gan.eval_generator(lat_space(16, device)))
@@ -221,7 +221,6 @@ device2 = "cpu"
 gan.models_to(device2)
 ```
 
-## Visualizing Training
 
 The Trainer object keeps track of certain metrics during training. These can be directly visualized via built-in functions, or accessed through the Trainer object's `.stats` dictionary.
 
@@ -234,7 +233,7 @@ gan.loss_by_epoch(model) # "D" or "G"
 
 # Equivalent to:
 gan.loss_by_epoch_g()
-# or
+# Or
 gan.loss_by_epoch_d()
 
 # Or:
@@ -252,7 +251,7 @@ Shows a graph of the Wasserstein distance of the generator per epoch. Called wit
 Returns the total number of epochs which the specified model was trained. Called with `.epochs_trained(model)`
 
 ## Saving and Loading
-Trainer objects can save and load checkpoints by using the `soft_save(path)` and `soft_load(path)` functions respectively. These functions use pickle - **only attempt to load checkpoints from a trusted source.**
+Trainer objects can save and load checkpoints by using the `soft_save(PATH)` and `soft_load(PATH)` functions respectively. For these functions, PATH is where in your directory you wish to save or load your models. This is not dependent on the location of your program. These functions use pickle - **only attempt to load checkpoints from a trusted source.**
 
 ### Loading a Checkpoint
 Trainer objects save model and optimizer states using the built-in pytorch functions for saving state dictionaries. This means that it is only possible to load the models and optimizers if their class definitions are already known to the Trainer object.
