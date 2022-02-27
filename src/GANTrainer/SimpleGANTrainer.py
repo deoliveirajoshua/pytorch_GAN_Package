@@ -1,10 +1,9 @@
-from GANTrainer import ToTrain
+from src.GANTrainer import ToTrain
 import torch
 import math, os, pickle
 import matplotlib.pyplot as plt
 from scipy.stats import wasserstein_distance
 import torch.optim as optim
-
 
 
 class SimpleGANTrainer:
@@ -38,7 +37,7 @@ class SimpleGANTrainer:
 
         self.d_thresh = d_thresh
         self.device = device
-        self.flags = {"is_wass":False}
+        self.flags = {"is_wass": False}
 
     def train(self, n_epochs, n_batch):
         for epoch in range(n_epochs):

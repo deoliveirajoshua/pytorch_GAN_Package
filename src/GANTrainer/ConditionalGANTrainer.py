@@ -1,4 +1,4 @@
-from GANTrainer import SimpleGANTrainer
+from src.GANTrainer import SimpleGANTrainer
 import torch
 import torch.nn.functional as func
 import numpy as np
