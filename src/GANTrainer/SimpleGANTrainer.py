@@ -1,9 +1,11 @@
-from src.GANTrainer import ToTrain
-import torch
-import math, os, pickle
+import math
+import os
+import pickle
 import matplotlib.pyplot as plt
-from scipy.stats import wasserstein_distance
+import torch
 import torch.optim as optim
+from scipy.stats import wasserstein_distance
+from GANTrainer import ToTrain
 
 
 class SimpleGANTrainer:
