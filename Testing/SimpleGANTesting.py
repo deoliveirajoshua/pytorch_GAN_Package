@@ -68,6 +68,8 @@ device = input("Would you like to run this test on cpu or cuda? Type the one you
 
 gan = SimpleGANTrainer(gen, dis, lat_space, batch_from_data, gen_loss, dis_loss, gen_opt, dis_opt, device, sw)
 gan.train(7000, 16)
-print(gan.eval_generator(lat_space(16, device)))
+
+gan.eval_generator(lat_space(16, device))
+
 gan.loss_by_epoch_d()
 
