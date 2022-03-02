@@ -71,7 +71,7 @@ device = input("Would you like to run this test on cpu or cuda? Type the one you
 gan = SimpleGANTrainer(gen, dis, lat_space, batch_from_data, gen_loss, dis_loss, gen_opt, dis_opt, device, sw)
 gan.train(700, 16)
 
-gan.soft_save(os.getcwd() + "/SAVETEST")
+gan.soft_save()
 
 gan2 = SimpleGANTrainer(Generator(), Discriminator(), lat_space, batch_from_data, None, None,
                         torch.optim.Adam(gen.parameters(), lr=0.001),
